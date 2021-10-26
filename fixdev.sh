@@ -45,7 +45,7 @@ fi
 
 #then, make sure we have debugbar, framework and logs inside storage
 #debugbar is not installed by default, but it does not hurt to have it's directory there , ready for when you install it
-for DIR in debugbar framework logs
+for DIR in debugbar framework logs db_backups
 do
     if [ ! -d ${STORAGE}/${DIR} ]; then
         echo "Creating ${STORAGE}/${DIR} directory..."
@@ -134,6 +134,14 @@ sudo find ${SCRIPTPATH} -type f -not -path "${SCRIPTPATH}/vendor/*" -not -path "
 #change permissions on directories to 755
 echo "Setting permissions 0755 on all directories... (excluding vendor, node_modules and .git directories)"
 sudo find ${SCRIPTPATH} -type d -not -path "${SCRIPTPATH}/vendor/*" -not -path "${SCRIPTPATH}/node_modules/*"  -not -path "${SCRIPTPATH}/.git/*" -exec chmod 0755 {} \;
+
+#change permissions on bootstrap/cache to 775
+echo "Setting permissions 0775 on bootstrap/cache"
+sudo chmod 0775 ${BOOTSTRAPCACHE}
+
+#change permissions on the php files that live in bootstrap/cache to 0775
+echo "Setting permissions 0775 on php files in bootstrap/cache"
+sudo chmod 0775 ${BOOTSTRAPCACHE}/*.php
 
 #if i have any bash scripts in there, make them executable
 echo "Making any existing shell scripts executable"
